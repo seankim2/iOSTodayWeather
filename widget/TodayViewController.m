@@ -20,7 +20,11 @@
 
 @end
 
+
 @implementation TodayViewController
+
+@synthesize locationManager;
+@synthesize startingPoint;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -33,8 +37,11 @@
     //curWeatherLabel.center = CGPointMake(200, 8);
     NSLog(@"22222");
     
+}
+
+- (void) loadView
+{
     [self initLocationInfo];
-    
 }
 
 - (void)didReceiveMemoryWarning {
