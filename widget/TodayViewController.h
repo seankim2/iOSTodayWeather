@@ -35,18 +35,23 @@
     
     CLLocationManager						*locationManager;
     CLLocation								*startingPoint;
+    
+    NSMutableData *responseData;
 }
 
 @property (retain, nonatomic) CLLocationManager					*locationManager;
 @property (retain, nonatomic) CLLocation						*startingPoint;
+@property (retain, nonatomic) NSMutableData						*responseData;
 
 
 - (IBAction) editWidget:(id)sender;
 - (IBAction) updateData:(id)sender;
 
-- (void) refreshDatas;
-
-
 - (void) initLocationInfo;
+- (void) refreshDatas;
+- (void) getAddressFromDaum:(double)latitude longitude:(double)longitude;
+- (void) requestAsyncRequest:(NSString *)nssURL;
+- (void) makeJSONWithData:(NSData *)jsonData;
+- (void) parseJSONData:(NSDictionary *)jsonDict;
 
 @end

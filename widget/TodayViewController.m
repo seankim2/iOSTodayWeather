@@ -14,7 +14,13 @@
  Definitions
  ********************************************************************/
 
-#define USE_LOCATION
+#define STR_DAUM_COORD2ADDR_URL         @"https://apis.daum.net/local/geo/coord2addr"
+#define STR_APIKEY                      @"?apikey="
+#define STR_DAUM_SERVICE_KEY            @"6d0116e2c49361cb75eaf12f665e6360"
+#define STR_LONGITUDE                   @"&longitude="
+#define STR_LATITUDE                    @"&latitude="
+#define STR_INPUT_COORD                 @"&inputCoordSystem=WGS84"
+#define STR_OUTPUT_JSON                 @"&output=json"
 
 @interface TodayViewController () <NCWidgetProviding>
 
@@ -25,18 +31,14 @@
 
 @synthesize locationManager;
 @synthesize startingPoint;
+@synthesize responseData;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    //curWeatherLabel.frame = CGRectMake(0, 0, 100, 50);
     [self setPreferredContentSize:CGSizeMake(320.0, 250.0)];
     //[self refresh];
-    
-    //curWeatherLabel.center = CGPointMake(200, 8);
-    NSLog(@"22222");
-    
 }
 
 - (void) loadView
@@ -75,6 +77,90 @@
 
 // Location
 
+- (void) getAddressFromDaum:(double)latitude longitude:(double)longitude
+{
+    NSString *nssURL = [NSString stringWithFormat:@"%@%@%@%@%g%@%g%@%@", STR_DAUM_COORD2ADDR_URL, STR_APIKEY, STR_DAUM_SERVICE_KEY, STR_LONGITUDE, longitude, STR_LATITUDE, latitude, STR_INPUT_COORD, STR_OUTPUT_JSON];
+    
+    NSLog(@"url : %@", nssURL);
+    
+    [self requestAsyncRequest:nssURL];
+    
+    
+}
+
+- (void) requestAsyncRequest:(NSString *)nssURL
+{
+    //NSURL *myURL = [NSURL URLWithString:@"http://www.example.com"];
+    //NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:myURL cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
+    
+    //[[NSURLConnection alloc] initWithRequest:request delegate:self];
+    
+    NSURL *url = [NSURL URLWithString:nssURL];
+    NSURLSessionTask *task = [[NSURLSession sharedSession] dataTaskWithURL:url
+                                                         completionHandler:
+                              ^(NSData *data, NSURLResponse *response, NSError *error) {
+                                  if (data) {
+                                      // Do stuff with the data
+                                      NSLog(@"data : %@", data);
+                                      [self makeJSONWithData:data];
+                                  } else {
+                                      NSLog(@"Failed to fetch %@: %@", url, error);
+                                  }
+                              }];
+    
+    [task resume];
+}
+
+- (void) makeJSONWithData:(NSData *)jsonData
+{
+    NSError *error;
+    NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
+    NSLog(@"%@", jsonDict);
+    
+    [self parseJSONData:jsonDict];
+}
+
+- (void) parseJSONData:(NSDictionary *)jsonDict
+{
+    NSDictionary *dict;
+    dict = [jsonDict objectForKey:@"error"];
+    NSLog(@"error dict : %@", dict);
+    
+    if(dict)
+    {
+        NSLog(@"error message : %@", [dict objectForKey:@"message"]);
+    }
+    else
+    {
+        NSLog(@"I am valid json data!!!");
+    }
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+{
+    responseData = [[NSMutableData alloc] init];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
+{
+    [responseData appendData:data];
+}
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
+{
+    //[responseData release];
+    //[connection release];
+    //[textView setString:@"Unable to fetch data"];
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection
+{
+    NSLog(@"Succeeded! Received %lu bytes of data",(unsigned long)[responseData length]);
+    NSString *txt = [[NSString alloc] initWithData:responseData encoding:NSASCIIStringEncoding];
+    
+    NSLog(@"txt : %@", txt);
+}
+
 /********************************************************************
  *
  * Name			: initLocationInfo
@@ -95,8 +181,6 @@
     // Update if you move 200 meter
     locationManager.distanceFilter = 200;
     [locationManager startUpdatingLocation];
-    
-    NSLog(@"11111");
 }
 
 /********************************************************************
@@ -114,12 +198,8 @@
      didUpdateToLocation:(CLLocation *)newLocation
             fromLocation:(CLLocation *)oldLocation
 {
-    NSLog(@"4444");
-    
     NSDate* eventDate = newLocation.timestamp;
     NSTimeInterval	howRecent = [eventDate timeIntervalSinceNow];
-    
-    NSLog(@"3333");
     
     if(startingPoint == nil)
         self.startingPoint = newLocation;
@@ -136,6 +216,8 @@
               newLocation.coordinate.latitude,
               newLocation.coordinate.longitude);
         
+        [self getAddressFromDaum:gMylatitude longitude:gMylongitude];
+        
 #if 0
         CLLocation *testCLL = [[CLLocation alloc] initWithLatitude:gMylatitude longitude:gMylongitude];
         
@@ -146,6 +228,7 @@
 #endif		
     }
 }
+
 
 /********************************************************************
  *
@@ -162,8 +245,6 @@
         didFailWithError:(NSError *)error
 {
     NSString *errorType;
-    
-    NSLog(@"5555");
     
     if(error.code == kCLErrorDenied)
     {
