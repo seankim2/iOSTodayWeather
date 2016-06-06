@@ -79,6 +79,10 @@
 
 - (void) getAddressFromDaum:(double)latitude longitude:(double)longitude
 {
+    // for emulator
+    latitude = 37.574226;
+    longitude = 127.191671;
+    
     NSString *nssURL = [NSString stringWithFormat:@"%@%@%@%@%g%@%g%@%@", STR_DAUM_COORD2ADDR_URL, STR_APIKEY, STR_DAUM_SERVICE_KEY, STR_LONGITUDE, longitude, STR_LATITUDE, latitude, STR_INPUT_COORD, STR_OUTPUT_JSON];
     
     NSLog(@"url : %@", nssURL);
