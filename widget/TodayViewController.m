@@ -88,8 +88,6 @@
     NSLog(@"url : %@", nssURL);
     
     [self requestAsyncRequest:nssURL];
-    
-    
 }
 
 - (void) requestAsyncRequest:(NSString *)nssURL
@@ -127,6 +125,13 @@
 - (void) parseJSONData:(NSDictionary *)jsonDict
 {
     NSDictionary *dict;
+    NSString *nssFullName;
+    NSString *nssName;
+    NSString *nssName0;
+    NSString *nssName1;
+    NSString *nssName2;
+    NSString *nssName3;
+    
     dict = [jsonDict objectForKey:@"error"];
     NSLog(@"error dict : %@", dict);
     
@@ -137,6 +142,20 @@
     else
     {
         NSLog(@"I am valid json data!!!");
+        
+        nssFullName = [jsonDict objectForKey:@"fullName"];
+        nssName = [jsonDict objectForKey:@"name"];
+        nssName0 = [jsonDict objectForKey:@"name0"];
+        nssName1 = [jsonDict objectForKey:@"name1"];
+        nssName2 = [jsonDict objectForKey:@"name2"];
+        nssName3 = [jsonDict objectForKey:@"name3"];
+        
+        NSLog(@"nssFullName : %@", nssFullName);
+        NSLog(@"nssName : %@", nssName);
+        NSLog(@"nssName0 : %@", nssName0);
+        NSLog(@"nssName1 : %@", nssName1);
+        NSLog(@"nssName2 : %@", nssName2);
+        NSLog(@"nssName3 : %@", nssName3);
     }
 }
 
