@@ -50,8 +50,8 @@
 - (void) initLocationInfo;
 - (void) refreshDatas;
 - (void) getAddressFromDaum:(double)latitude longitude:(double)longitude;
-- (void) requestAsyncRequest:(NSString *)nssURL;
-- (void) makeJSONWithData:(NSData *)jsonData;
+- (void) requestAsyncRequest:(NSString *)nssURL reqType:(NSUInteger)type;
+- (void) makeJSONWithData:(NSData *)jsonData reqType:(NSUInteger)type;;
 - (void) parseJSONData:(NSDictionary *)jsonDict;
 
 @end

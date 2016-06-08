@@ -9,6 +9,16 @@
 #import "TodayViewController.h"
 #import <NotificationCenter/NotificationCenter.h>
 
+/********************************************************************
+ Enumration
+ ********************************************************************/
+typedef enum
+{
+    TYPE_REQUEST_NONE,
+    TYPE_REQUEST_ADDR,
+    TYPE_REQUEST_WEATHER,
+    TYPE_REQUEST_MAX,
+} TYPE_REQUEST;
 
 /********************************************************************
  Definitions
@@ -39,6 +49,7 @@
     
     [self setPreferredContentSize:CGSizeMake(320.0, 250.0)];
     curWeatherLabel.center = CGPointMake(0, 0);
+    curWeatherLabel.text = @"good TW";
     //[self.view refresh];
 }
 
@@ -88,10 +99,10 @@
     
     NSLog(@"url : %@", nssURL);
     
-    [self requestAsyncRequest:nssURL];
+    [self requestAsyncRequest:nssURL reqType:TYPE_REQUEST_ADDR];
 }
 
-- (void) requestAsyncRequest:(NSString *)nssURL
+- (void) requestAsyncRequest:(NSString *)nssURL reqType:(NSUInteger)type
 {
     //NSURL *myURL = [NSURL URLWithString:@"http://www.example.com"];
     //NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:myURL cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
@@ -99,13 +110,14 @@
     //[[NSURLConnection alloc] initWithRequest:request delegate:self];
     
     NSURL *url = [NSURL URLWithString:nssURL];
+  
     NSURLSessionTask *task = [[NSURLSession sharedSession] dataTaskWithURL:url
                                                          completionHandler:
                               ^(NSData *data, NSURLResponse *response, NSError *error) {
                                   if (data) {
                                       // Do stuff with the data
                                       NSLog(@"data : %@", data);
-                                      [self makeJSONWithData:data];
+                                      [self makeJSONWithData:data reqType:type];
                                   } else {
                                       NSLog(@"Failed to fetch %@: %@", url, error);
                                   }
@@ -114,13 +126,16 @@
     [task resume];
 }
 
-- (void) makeJSONWithData:(NSData *)jsonData
+- (void) makeJSONWithData:(NSData *)jsonData reqType:(NSUInteger)type
 {
     NSError *error;
     NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
     NSLog(@"%@", jsonDict);
     
-    [self parseJSONData:jsonDict];
+    if(type == TYPE_REQUEST_ADDR)
+        [self parseJSONData:jsonDict];
+    else if(type == TYPE_REQUEST_WEATHER)
+        NSLog(@"request weather result %@", jsonDict);
 }
 
 - (void) parseJSONData:(NSDictionary *)jsonDict
@@ -132,6 +147,8 @@
     NSString *nssName1;
     NSString *nssName2;
     NSString *nssName3;
+    NSString *nssURL;
+    NSCharacterSet *set;
     
     dict = [jsonDict objectForKey:@"error"];
     NSLog(@"error dict : %@", dict);
@@ -157,6 +174,14 @@
         NSLog(@"nssName1 : %@", nssName1);
         NSLog(@"nssName2 : %@", nssName2);
         NSLog(@"nssName3 : %@", nssName3);
+        
+        nssURL = [NSString stringWithFormat:@"http://tw-wzdfac.rhcloud.com/v000705/daily/town/%@/%@/%@", nssName1, nssName2, nssName3];
+        NSLog(@"before %@", nssURL);
+        set = [NSCharacterSet URLHostAllowedCharacterSet];
+        
+        nssURL = [nssURL stringByAddingPercentEncodingWithAllowedCharacters:set];
+        NSLog(@"after %@", nssURL);
+        [self requestAsyncRequest:nssURL reqType:TYPE_REQUEST_WEATHER];
     }
 }
 
