@@ -38,7 +38,8 @@
     // Do any additional setup after loading the view from its nib.
     
     [self setPreferredContentSize:CGSizeMake(320.0, 250.0)];
-    //[self refresh];
+    curWeatherLabel.center = CGPointMake(0, 0);
+    //[self.view refresh];
 }
 
 - (void) loadView
@@ -260,6 +261,9 @@
     {
         errorType = @"Unknown Error";
         NSLog(@"error code : %ld", (long)error.code);
+        
+        // just test
+        [self getAddressFromDaum:gMylatitude longitude:gMylongitude];
     }
 }
 
