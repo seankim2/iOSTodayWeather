@@ -37,6 +37,7 @@ typedef enum
 @end
 
 
+
 @implementation TodayViewController
 
 @synthesize locationManager;
@@ -175,12 +176,13 @@ typedef enum
         NSLog(@"nssName2 : %@", nssName2);
         NSLog(@"nssName3 : %@", nssName3);
         
-        nssURL = [NSString stringWithFormat:@"http://tw-wzdfac.rhcloud.com/v000705/daily/town/%@/%@/%@", nssName1, nssName2, nssName3];
-        NSLog(@"before %@", nssURL);
-        set = [NSCharacterSet URLHostAllowedCharacterSet];
+        nssURL = [NSString stringWithFormat:@"https://tw-wzdfac.rhcloud.com/v000705/daily/town/%@/%@/%@", nssName1, nssName2, nssName3];
+        NSLog(@"nssURL %@", nssURL);
+        set = [NSCharacterSet URLQueryAllowedCharacterSet];
         
         nssURL = [nssURL stringByAddingPercentEncodingWithAllowedCharacters:set];
         NSLog(@"after %@", nssURL);
+
         [self requestAsyncRequest:nssURL reqType:TYPE_REQUEST_WEATHER];
     }
 }
