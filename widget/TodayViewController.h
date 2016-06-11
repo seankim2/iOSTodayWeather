@@ -53,5 +53,6 @@
 - (void) requestAsyncRequest:(NSString *)nssURL reqType:(NSUInteger)type;
 - (void) makeJSONWithData:(NSData *)jsonData reqType:(NSUInteger)type;;
 - (void) parseJSONData:(NSDictionary *)jsonDict;
+- (void) processWeatherResults:(NSDictionary *)jsonDict;
 
 @end

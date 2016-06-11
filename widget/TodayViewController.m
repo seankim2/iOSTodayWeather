@@ -44,20 +44,29 @@ typedef enum
 @synthesize startingPoint;
 @synthesize responseData;
 
+#if 1
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    [self setPreferredContentSize:CGSizeMake(320.0, 250.0)];
+    [self setPreferredContentSize:CGSizeMake(self.view.bounds.size.width, 300)];
     curWeatherLabel.center = CGPointMake(0, 0);
-    curWeatherLabel.text = @"good TW";
-    //[self.view refresh];
-}
-
-- (void) loadView
-{
+    //curWeatherLabel.text = @"good TW";
+//
+    //[self refresh];
+    
     [self initLocationInfo];
 }
+#endif
+
+#if 0
+- (void) loadView
+{
+    
+    
+    
+}
+#endif
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -86,6 +95,7 @@ typedef enum
 - (void) refreshDatas
 {
     //NSLog(@"Data %s received", (char*)data);
+    [self initLocationInfo];
 }
 
 // Location
@@ -136,7 +146,9 @@ typedef enum
     if(type == TYPE_REQUEST_ADDR)
         [self parseJSONData:jsonDict];
     else if(type == TYPE_REQUEST_WEATHER)
-        NSLog(@"request weather result %@", jsonDict);
+        [self processWeatherResults:jsonDict];
+    
+    //NSLog(@"request weather result %@", jsonDict);
 }
 
 - (void) parseJSONData:(NSDictionary *)jsonDict
@@ -185,6 +197,70 @@ typedef enum
 
         [self requestAsyncRequest:nssURL reqType:TYPE_REQUEST_WEATHER];
     }
+}
+
+- (void) processWeatherResults:(NSDictionary *)jsonDict
+{
+    NSDictionary *nsdDailySumDict = nil;
+    
+    NSString *nssDSIcon = nil;
+    NSString *nssDSText = nil;    // DailySummary Text
+    NSString *nssDSTitle = nil;    // DailySummary;
+    
+    NSDictionary *todayDict = nil;
+    NSDictionary *tomoDict = nil;
+    NSDictionary *yestDict = nil;
+    
+    NSUInteger todayMinTemp = 0;
+    NSUInteger todayMaxTemp = 0;
+    
+    NSUInteger tomoMinTemp = 0;
+    NSUInteger tomoMaxTemp = 0;
+    
+    NSUInteger yestMinTemp = 0;
+    NSUInteger yestMaxTemp = 0;
+    
+    NSLog(@"processWeatherResults : %@", jsonDict);
+    
+    nsdDailySumDict = [jsonDict objectForKey:@"dailySummary"];
+    
+    nssDSIcon = [nsdDailySumDict objectForKey:@"icon"];
+    nssDSText = [nsdDailySumDict objectForKey:@"text"];
+    nssDSTitle = [nsdDailySumDict objectForKey:@"title"];
+    
+    todayDict = [nsdDailySumDict objectForKey:@"today"];
+    tomoDict = [nsdDailySumDict objectForKey:@"tomorrow"];
+    yestDict = [nsdDailySumDict objectForKey:@"yesterday"];
+    
+    todayMinTemp = [[todayDict valueForKey:@"tmn"] unsignedIntValue];
+    todayMaxTemp = [[todayDict valueForKey:@"tmx"] unsignedIntValue];
+    
+    tomoMinTemp = [[tomoDict valueForKey:@"tmn"] unsignedIntValue];
+    tomoMaxTemp = [[tomoDict valueForKey:@"tmx"] unsignedIntValue];
+    
+    yestMinTemp = [[yestDict valueForKey:@"tmn"] unsignedIntValue];
+    yestMaxTemp = [[yestDict valueForKey:@"tmx"] unsignedIntValue];
+    
+    NSLog(@"nssDSIcon : %@", nssDSIcon);
+    NSLog(@"nssDSText : %@", nssDSText);
+    NSLog(@"nssDSTitle : %@", nssDSTitle);
+    
+    NSLog(@"todayMinTemp : %lu", todayMinTemp);
+    NSLog(@"todayMaxTemp : %lu", todayMaxTemp);
+    
+    NSLog(@"tomoMinTemp : %lu", tomoMinTemp);
+    NSLog(@"tomoMaxTemp : %lu", tomoMaxTemp);
+    
+    NSLog(@"yestMinTemp : %lu", yestMinTemp);
+    NSLog(@"yestMaxTemp : %lu", yestMaxTemp);
+    
+#if 0
+    dispatch_async(dispatch_get_main_queue(), ^{
+        // code here
+        //curSumLabel.text = nssDSText;
+    });
+#endif
+
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
