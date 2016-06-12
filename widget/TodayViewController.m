@@ -220,6 +220,8 @@ typedef enum
     NSUInteger yestMinTemp = 0;
     NSUInteger yestMaxTemp = 0;
     
+    NSString    *nssCityName = nil;
+    
     NSLog(@"processWeatherResults : %@", jsonDict);
     
     nsdDailySumDict = [jsonDict objectForKey:@"dailySummary"];
@@ -254,13 +256,11 @@ typedef enum
     NSLog(@"yestMinTemp : %lu", yestMinTemp);
     NSLog(@"yestMaxTemp : %lu", yestMaxTemp);
     
-#if 0
     dispatch_async(dispatch_get_main_queue(), ^{
         // code here
-        //curSumLabel.text = nssDSText;
+        curSumLabel.text = nssDSText;
+        
     });
-#endif
-
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response

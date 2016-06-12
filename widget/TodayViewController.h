@@ -12,19 +12,19 @@
 
 @interface TodayViewController : UIViewController <CLLocationManagerDelegate>
 {
-    IBOutlet UILabel        *curWeatherLabel;        // current weather
-    IBOutlet UILabel        *curTempLabel;           // current temperature
-    IBOutlet UILabel        *curDustLabel;           // current dust
-    IBOutlet UILabel        *curPosLabel;            // current position
-    IBOutlet UILabel        *curSumLabel;            // current summary
+    IBOutlet UILabel        *curTitleLabel;        // current weather title
+    IBOutlet UILabel        *curSumLabel;            // current summary(text)
+
+    IBOutlet UIImageView    *todayWTIconIV;            // yesterday weather status
     
-    IBOutlet UIImageView    *yestStatusIV;            // yesterday weather status
-    IBOutlet UILabel        *yestMaxTempLabel;        // yestterday Max Temperature
-    IBOutlet UILabel        *yestMinTempLabel;        // yestterday Min Temperature
+    IBOutlet UILabel        *todayMaxTempLabel;        // yestterday Max Temperature
+    IBOutlet UILabel        *todayMinTempLabel;        // yestterday Min Temperature
     
-    IBOutlet UIImageView    *tomoStatusIV;            // tomorrow weather status
     IBOutlet UILabel        *tomoMaxTempLabel;        // tomorrow Max Temperature
     IBOutlet UILabel        *tomoMinTempLabel;        // tomorrow Min Temperature
+    
+    IBOutlet UILabel        *yestMaxTempLabel;        // yestterday Max Temperature
+    IBOutlet UILabel        *yestMinTempLabel;        // yestterday Min Temperature
     
     IBOutlet UIButton       *editWidgetBtn;
     IBOutlet UIButton       *updateDataBtn;
