@@ -12,6 +12,9 @@
 
 @interface TodayViewController : UIViewController <CLLocationManagerDelegate>
 {
+    IBOutlet UILabel        *addressLabel;
+    IBOutlet UILabel        *updateTimeLabel;
+    
     IBOutlet UILabel        *curTitleLabel;        // current weather title
     IBOutlet UILabel        *curSumLabel;            // current summary(text)
 

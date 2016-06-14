@@ -50,7 +50,7 @@ typedef enum
     // Do any additional setup after loading the view from its nib.
     
     [self setPreferredContentSize:CGSizeMake(self.view.bounds.size.width, 300)];
-    curWeatherLabel.center = CGPointMake(0, 0);
+    //curWeatherLabel.center = CGPointMake(0, 0);
     //curWeatherLabel.text = @"good TW";
 //
     //[self refresh];
@@ -221,8 +221,14 @@ typedef enum
     NSUInteger yestMaxTemp = 0;
     
     NSString    *nssCityName = nil;
+    NSString    *nssRegionName = nil;
+    NSString    *nssTownName = nil;
     
     NSLog(@"processWeatherResults : %@", jsonDict);
+    
+    nssCityName = [jsonDict objectForKey:@"cityName"];
+    nssRegionName = [jsonDict objectForKey:@"regionName"];
+    nssTownName = [jsonDict objectForKey:@"townName"];
     
     nsdDailySumDict = [jsonDict objectForKey:@"dailySummary"];
     
