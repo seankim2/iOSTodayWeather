@@ -49,7 +49,7 @@ typedef enum
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    [self setPreferredContentSize:CGSizeMake(self.view.bounds.size.width, 300)];
+    [self setPreferredContentSize:CGSizeMake(self.view.bounds.size.width, 180)];
     //curWeatherLabel.center = CGPointMake(0, 0);
     //curWeatherLabel.text = @"good TW";
 //
@@ -102,7 +102,7 @@ typedef enum
 
 - (void) getAddressFromDaum:(double)latitude longitude:(double)longitude
 {
-    // for emulator
+    // for emulator - delete me
     latitude = 37.574226;
     longitude = 127.191671;
     
@@ -223,18 +223,25 @@ typedef enum
     NSString    *nssCityName = nil;
     NSString    *nssRegionName = nil;
     NSString    *nssTownName = nil;
+    NSString    *nssAddress = nil;
+    
+    NSString    *nssDate = nil;
     
     NSLog(@"processWeatherResults : %@", jsonDict);
     
     nssCityName = [jsonDict objectForKey:@"cityName"];
     nssRegionName = [jsonDict objectForKey:@"regionName"];
     nssTownName = [jsonDict objectForKey:@"townName"];
+    nssAddress = [NSString stringWithFormat:@"%@ %@", nssCityName, nssTownName];
+    
     
     nsdDailySumDict = [jsonDict objectForKey:@"dailySummary"];
     
-    nssDSIcon = [nsdDailySumDict objectForKey:@"icon"];
-    nssDSText = [nsdDailySumDict objectForKey:@"text"];
-    nssDSTitle = [nsdDailySumDict objectForKey:@"title"];
+    nssDate     = [nsdDailySumDict objectForKey:@"date"];
+    
+    nssDSIcon   = [nsdDailySumDict objectForKey:@"icon"];
+    nssDSText   = [nsdDailySumDict objectForKey:@"text"];
+    nssDSTitle  = [nsdDailySumDict objectForKey:@"title"];
     
     todayDict = [nsdDailySumDict objectForKey:@"today"];
     tomoDict = [nsdDailySumDict objectForKey:@"tomorrow"];
@@ -264,7 +271,20 @@ typedef enum
     
     dispatch_async(dispatch_get_main_queue(), ^{
         // code here
-        curSumLabel.text = nssDSText;
+        addressLabel.text       = nssAddress;
+        updateTimeLabel.text    = nssDate;
+        
+        curSumLabel.text        = nssDSText;
+        curTitleLabel.text      = nssDSTitle;
+        
+        todayMaxTempLabel.text  = [NSString stringWithFormat:@"%lu도", todayMaxTemp];        // yestterday Max Temperature
+        todayMinTempLabel.text  = [NSString stringWithFormat:@"%lu도", todayMinTemp];        // yestterday Min Temperature
+        
+        tomoMaxTempLabel.text  = [NSString stringWithFormat:@"%lu도", tomoMaxTemp];        // tomorrow Max Temperature
+        tomoMinTempLabel.text  = [NSString stringWithFormat:@"%lu도", tomoMinTemp];        // tomorrow Min Temperature
+        
+        yestMaxTempLabel.text  = [NSString stringWithFormat:@"%lu도", yestMaxTemp];        // yestterday Max Temperature
+        yestMinTempLabel.text  = [NSString stringWithFormat:@"%lu도", yestMinTemp];        // yestterday Min Temperature
         
     });
 }
@@ -390,7 +410,7 @@ typedef enum
         errorType = @"Unknown Error";
         NSLog(@"error code : %ld", (long)error.code);
         
-        // just test
+        // just test - delete me
         [self getAddressFromDaum:gMylatitude longitude:gMylongitude];
     }
 }
