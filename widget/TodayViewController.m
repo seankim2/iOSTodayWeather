@@ -26,7 +26,7 @@ typedef enum
 
 #define STR_DAUM_COORD2ADDR_URL         @"https://apis.daum.net/local/geo/coord2addr"
 #define STR_APIKEY                      @"?apikey="
-#define STR_DAUM_SERVICE_KEY            @"6d0116e2c49361cb75eaf12f665e6360"
+#define STR_DAUM_SERVICE_KEY            @""
 #define STR_LONGITUDE                   @"&longitude="
 #define STR_LATITUDE                    @"&latitude="
 #define STR_INPUT_COORD                 @"&inputCoordSystem=WGS84"
@@ -204,6 +204,7 @@ typedef enum
     NSDictionary *nsdDailySumDict = nil;
     
     NSString *nssDSIcon = nil;
+    NSString *nssDSIconImgName = nil;
     NSString *nssDSText = nil;    // DailySummary Text
     NSString *nssDSTitle = nil;    // DailySummary;
     
@@ -240,6 +241,8 @@ typedef enum
     nssDate     = [nsdDailySumDict objectForKey:@"date"];
     
     nssDSIcon   = [nsdDailySumDict objectForKey:@"icon"];
+    nssDSIconImgName = [NSString stringWithFormat:@"%@.png", nssDSIcon];
+    
     nssDSText   = [nsdDailySumDict objectForKey:@"text"];
     nssDSTitle  = [nsdDailySumDict objectForKey:@"title"];
     
@@ -257,6 +260,8 @@ typedef enum
     yestMaxTemp = [[yestDict valueForKey:@"tmx"] unsignedIntValue];
     
     NSLog(@"nssDSIcon : %@", nssDSIcon);
+    
+    NSLog(@"nssDSIconImgName : %@", nssDSIconImgName);
     NSLog(@"nssDSText : %@", nssDSText);
     NSLog(@"nssDSTitle : %@", nssDSTitle);
     
@@ -268,6 +273,8 @@ typedef enum
     
     NSLog(@"yestMinTemp : %lu", yestMinTemp);
     NSLog(@"yestMaxTemp : %lu", yestMaxTemp);
+    
+    
     
     dispatch_async(dispatch_get_main_queue(), ^{
         // code here
@@ -286,6 +293,7 @@ typedef enum
         yestMaxTempLabel.text  = [NSString stringWithFormat:@"%lu도", yestMaxTemp];        // yestterday Max Temperature
         yestMinTempLabel.text  = [NSString stringWithFormat:@"%lu도", yestMinTemp];        // yestterday Min Temperature
         
+        todayWTIconIV.image = [UIImage imageNamed:nssDSIconImgName];
     });
 }
 
