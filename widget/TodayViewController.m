@@ -26,7 +26,7 @@ typedef enum
 
 #define STR_DAUM_COORD2ADDR_URL         @"https://apis.daum.net/local/geo/coord2addr"
 #define STR_APIKEY                      @"?apikey="
-#define STR_DAUM_SERVICE_KEY            @""
+#define STR_DAUM_SERVICE_KEY            @"6d0116e2c49361cb75eaf12f665e6360"
 #define STR_LONGITUDE                   @"&longitude="
 #define STR_LATITUDE                    @"&latitude="
 #define STR_INPUT_COORD                 @"&inputCoordSystem=WGS84"
@@ -49,7 +49,7 @@ typedef enum
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    [self setPreferredContentSize:CGSizeMake(self.view.bounds.size.width, 180)];
+    [self setPreferredContentSize:CGSizeMake(self.view.bounds.size.width, 280)];
     //curWeatherLabel.center = CGPointMake(0, 0);
     //curWeatherLabel.text = @"good TW";
 //
@@ -85,6 +85,22 @@ typedef enum
 
 - (IBAction) editWidget:(id)sender
 {
+    //[[UIApplication sharedApplication] openURL: [NSURL URLWithString:@"todayweather://"]];
+  /*
+    NSURL *customURL = [NSURL URLWithString:@"todayweather://"];
+    [self openURL:customURL completionHandler:^(BOOL success) {
+        if (success) {
+            // Success
+            NSLog(@"Success!!");
+        }
+        else {
+            // Fail
+            NSLog(@"Fail!!");
+        }
+    }];
+    */
+    NSURL *pjURL = [NSURL URLWithString:@"todayweather://"];
+    [self.extensionContext openURL:pjURL completionHandler:nil];
 }
 
 - (IBAction) updateData:(id)sender
@@ -294,6 +310,8 @@ typedef enum
         yestMinTempLabel.text  = [NSString stringWithFormat:@"%lu도", yestMinTemp];        // yestterday Min Temperature
         
         todayWTIconIV.image = [UIImage imageNamed:nssDSIconImgName];
+        
+        //[self setPreferredContentSize:CGSizeMake(self.view.bounds.size.width, 180)];
     });
 }
 
@@ -422,6 +440,5 @@ typedef enum
         [self getAddressFromDaum:gMylatitude longitude:gMylongitude];
     }
 }
-
 
 @end

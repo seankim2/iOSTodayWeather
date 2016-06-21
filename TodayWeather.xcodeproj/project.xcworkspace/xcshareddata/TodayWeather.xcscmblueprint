@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "1E7609C8BDB82723AEA6D8A7F50FE3ABB8BC1631",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "20B45C127DD49B3AA106A22941EB83DF5BB21DF9" : 0,
+    "1E7609C8BDB82723AEA6D8A7F50FE3ABB8BC1631" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "102A4812-C9C0-4DFE-BDDC-9B40F0E91E3C",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "20B45C127DD49B3AA106A22941EB83DF5BB21DF9" : "",
+    "1E7609C8BDB82723AEA6D8A7F50FE3ABB8BC1631" : "iOSTodayWeather\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "TodayWeather",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "TodayWeather.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/seankim2\/iOSTodayWeather.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "1E7609C8BDB82723AEA6D8A7F50FE3ABB8BC1631"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/WizardFactory\/TodayWeather.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "20B45C127DD49B3AA106A22941EB83DF5BB21DF9"
+    }
+  ]
+}
