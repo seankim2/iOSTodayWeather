@@ -9,6 +9,8 @@
 #import "TodayViewController.h"
 #import <NotificationCenter/NotificationCenter.h>
 
+#import "WidgetConfig.h"
+
 /********************************************************************
  Enumration
  ********************************************************************/
@@ -26,7 +28,6 @@ typedef enum
 
 #define STR_DAUM_COORD2ADDR_URL         @"https://apis.daum.net/local/geo/coord2addr"
 #define STR_APIKEY                      @"?apikey="
-#define STR_DAUM_SERVICE_KEY            @"6d0116e2c49361cb75eaf12f665e6360"
 #define STR_LONGITUDE                   @"&longitude="
 #define STR_LATITUDE                    @"&latitude="
 #define STR_INPUT_COORD                 @"&inputCoordSystem=WGS84"
@@ -122,7 +123,7 @@ typedef enum
     latitude = 37.574226;
     longitude = 127.191671;
     
-    NSString *nssURL = [NSString stringWithFormat:@"%@%@%@%@%g%@%g%@%@", STR_DAUM_COORD2ADDR_URL, STR_APIKEY, STR_DAUM_SERVICE_KEY, STR_LONGITUDE, longitude, STR_LATITUDE, latitude, STR_INPUT_COORD, STR_OUTPUT_JSON];
+    NSString *nssURL = [NSString stringWithFormat:@"%@%@%@%@%g%@%g%@%@", STR_DAUM_COORD2ADDR_URL, STR_APIKEY, DAUM_SERVICE_KEY, STR_LONGITUDE, longitude, STR_LATITUDE, latitude, STR_INPUT_COORD, STR_OUTPUT_JSON];
     
     NSLog(@"url : %@", nssURL);
     
