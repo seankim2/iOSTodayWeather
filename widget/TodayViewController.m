@@ -45,29 +45,12 @@ typedef enum
 @synthesize startingPoint;
 @synthesize responseData;
 
-#if 1
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    [self setPreferredContentSize:CGSizeMake(self.view.bounds.size.width, 280)];
-    //curWeatherLabel.center = CGPointMake(0, 0);
-    //curWeatherLabel.text = @"good TW";
-//
-    //[self refresh];
-    
     [self initLocationInfo];
 }
-#endif
-
-#if 0
-- (void) loadView
-{
-    
-    
-    
-}
-#endif
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -86,20 +69,6 @@ typedef enum
 
 - (IBAction) editWidget:(id)sender
 {
-    //[[UIApplication sharedApplication] openURL: [NSURL URLWithString:@"todayweather://"]];
-  /*
-    NSURL *customURL = [NSURL URLWithString:@"todayweather://"];
-    [self openURL:customURL completionHandler:^(BOOL success) {
-        if (success) {
-            // Success
-            NSLog(@"Success!!");
-        }
-        else {
-            // Fail
-            NSLog(@"Fail!!");
-        }
-    }];
-    */
     NSURL *pjURL = [NSURL URLWithString:@"todayweather://"];
     [self.extensionContext openURL:pjURL completionHandler:nil];
 }
@@ -111,12 +80,10 @@ typedef enum
 
 - (void) refreshDatas
 {
-    //NSLog(@"Data %s received", (char*)data);
     [self initLocationInfo];
 }
 
 // Location
-
 - (void) getAddressFromDaum:(double)latitude longitude:(double)longitude
 {
     // for emulator - delete me

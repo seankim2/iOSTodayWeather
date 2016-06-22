@@ -6,10 +6,17 @@
 //
 //
 
+/********************************************************************
+ Declare include files
+ ********************************************************************/
 #import <UIKit/UIKit.h>
 
 #import	<CoreLocation/CoreLocation.h>
 
+
+/********************************************************************
+ Declare Class Definitions
+ ********************************************************************/
 @interface TodayViewController : UIViewController <CLLocationManagerDelegate>
 {
     IBOutlet UILabel        *addressLabel;
@@ -42,11 +49,16 @@
     NSMutableData *responseData;
 }
 
+/********************************************************************
+ Declare Class properties
+ ********************************************************************/
 @property (retain, nonatomic) CLLocationManager					*locationManager;
 @property (retain, nonatomic) CLLocation						*startingPoint;
 @property (retain, nonatomic) NSMutableData						*responseData;
 
-
+/********************************************************************
+ Declare Class functions
+ ********************************************************************/
 - (IBAction) editWidget:(id)sender;
 - (IBAction) updateData:(id)sender;
 
