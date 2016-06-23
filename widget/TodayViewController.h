@@ -22,8 +22,8 @@
     IBOutlet UILabel        *addressLabel;
     IBOutlet UILabel        *updateTimeLabel;
     
-    IBOutlet UILabel        *curTitleLabel;        // current weather title
-    IBOutlet UILabel        *curSumLabel;            // current summary(text)
+    IBOutlet UILabel        *curTempLabel;              // current temperature title
+    IBOutlet UILabel        *curDustLabel;            // current Dust
 
     IBOutlet UIImageView    *todayWTIconIV;            // yesterday weather status
     

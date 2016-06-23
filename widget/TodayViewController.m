@@ -57,6 +57,17 @@ typedef enum
     // Dispose of any resources that can be recreated.
 }
 
+/********************************************************************
+ *
+ * Name			: widgetPerformUpdateWithCompletionHandler
+ * Description	: widgetPerformUpdateWithCompletionHandler
+ * Returns		: void
+ * Side effects :
+ * Date			: 2016. 06. 22
+ * Author		: SeanKim
+ * History		: 20160622 SeanKim Create function
+ *
+ ********************************************************************/
 - (void)widgetPerformUpdateWithCompletionHandler:(void (^)(NCUpdateResult))completionHandler {
     // Perform any setup necessary in order to update the view.
     
@@ -190,11 +201,16 @@ typedef enum
     NSString *nssDSIcon = nil;
     NSString *nssDSIconImgName = nil;
     NSString *nssDSText = nil;    // DailySummary Text
-    NSString *nssDSTitle = nil;    // DailySummary;
+    
+    NSDictionary *currentDict = nil;
+    NSDictionary *currentArpltnDict = nil;
     
     NSDictionary *todayDict = nil;
     NSDictionary *tomoDict = nil;
     NSDictionary *yestDict = nil;
+    
+    NSUInteger currentTemp = 0;
+    NSString    *nssPm10Str = nil;
     
     NSUInteger todayMinTemp = 0;
     NSUInteger todayMaxTemp = 0;
@@ -217,7 +233,21 @@ typedef enum
     nssCityName = [jsonDict objectForKey:@"cityName"];
     nssRegionName = [jsonDict objectForKey:@"regionName"];
     nssTownName = [jsonDict objectForKey:@"townName"];
-    nssAddress = [NSString stringWithFormat:@"%@ %@", nssCityName, nssTownName];
+    if(nssTownName)
+    {
+        nssAddress = [NSString stringWithFormat:@"%@", nssTownName];
+    }
+    else
+    {
+        if(nssCityName)
+        {
+            nssAddress = [NSString stringWithFormat:@"%@", nssCityName];
+        }
+        else
+        {
+            nssAddress = [NSString stringWithFormat:@"%@", nssRegionName];
+        }
+    }
     
     
     nsdDailySumDict = [jsonDict objectForKey:@"dailySummary"];
@@ -228,11 +258,16 @@ typedef enum
     nssDSIconImgName = [NSString stringWithFormat:@"%@.png", nssDSIcon];
     
     nssDSText   = [nsdDailySumDict objectForKey:@"text"];
-    nssDSTitle  = [nsdDailySumDict objectForKey:@"title"];
     
-    todayDict = [nsdDailySumDict objectForKey:@"today"];
-    tomoDict = [nsdDailySumDict objectForKey:@"tomorrow"];
-    yestDict = [nsdDailySumDict objectForKey:@"yesterday"];
+    currentDict         = [nsdDailySumDict objectForKey:@"current"];
+    currentArpltnDict   = [currentDict objectForKey:@"arpltn"];
+    nssPm10Str          = [currentArpltnDict objectForKey:@"pm10Str"];
+    
+    todayDict   = [nsdDailySumDict objectForKey:@"today"];
+    tomoDict    = [nsdDailySumDict objectForKey:@"tomorrow"];
+    yestDict    = [nsdDailySumDict objectForKey:@"yesterday"];
+    
+    currentTemp  = [[currentDict valueForKey:@"t1h"] unsignedIntValue];
     
     todayMinTemp = [[todayDict valueForKey:@"tmn"] unsignedIntValue];
     todayMaxTemp = [[todayDict valueForKey:@"tmx"] unsignedIntValue];
@@ -247,7 +282,8 @@ typedef enum
     
     NSLog(@"nssDSIconImgName : %@", nssDSIconImgName);
     NSLog(@"nssDSText : %@", nssDSText);
-    NSLog(@"nssDSTitle : %@", nssDSTitle);
+    
+    NSLog(@"currentTemp : %lu", currentTemp);
     
     NSLog(@"todayMinTemp : %lu", todayMinTemp);
     NSLog(@"todayMaxTemp : %lu", todayMaxTemp);
@@ -265,8 +301,8 @@ typedef enum
         addressLabel.text       = nssAddress;
         updateTimeLabel.text    = nssDate;
         
-        curSumLabel.text        = nssDSText;
-        curTitleLabel.text      = nssDSTitle;
+        curDustLabel.text       = nssPm10Str;
+        curTempLabel.text       = [NSString stringWithFormat:@"%lu도", currentTemp];
         
         todayMaxTempLabel.text  = [NSString stringWithFormat:@"%lu도", todayMaxTemp];        // yestterday Max Temperature
         todayMinTempLabel.text  = [NSString stringWithFormat:@"%lu도", todayMinTemp];        // yestterday Min Temperature
@@ -279,9 +315,11 @@ typedef enum
         
         todayWTIconIV.image = [UIImage imageNamed:nssDSIconImgName];
         
-        //[self setPreferredContentSize:CGSizeMake(self.view.bounds.size.width, 180)];
+        [self setPreferredContentSize:CGSizeMake(self.view.bounds.size.width, 180)];
     });
 }
+
+
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
