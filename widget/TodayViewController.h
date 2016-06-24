@@ -66,7 +66,7 @@
 - (void) initLocationInfo;
 - (void) refreshDatas;
 - (void) getAddressFromDaum:(double)latitude longitude:(double)longitude;
-- (void) requestAsyncRequest:(NSString *)nssURL reqType:(NSUInteger)type;
+- (void) requestAsyncByURLSession:(NSString *)nssURL reqType:(NSUInteger)type;
 - (void) makeJSONWithData:(NSData *)jsonData reqType:(NSUInteger)type;;
 - (void) parseJSONData:(NSDictionary *)jsonDict;
 - (void) processWeatherResults:(NSDictionary *)jsonDict;

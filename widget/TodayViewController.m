@@ -25,6 +25,7 @@ typedef enum
 /********************************************************************
  Definitions
  ********************************************************************/
+#define USE_DEBUG                       0
 
 #define STR_DAUM_COORD2ADDR_URL         @"https://apis.daum.net/local/geo/coord2addr"
 #define STR_APIKEY                      @"?apikey="
@@ -33,18 +34,33 @@ typedef enum
 #define STR_INPUT_COORD                 @"&inputCoordSystem=WGS84"
 #define STR_OUTPUT_JSON                 @"&output=json"
 
+/********************************************************************
+ Interface
+ ********************************************************************/
 @interface TodayViewController () <NCWidgetProviding>
 
 @end
 
-
-
+/********************************************************************
+ Class Implementation
+ ********************************************************************/
 @implementation TodayViewController
 
 @synthesize locationManager;
 @synthesize startingPoint;
 @synthesize responseData;
 
+/********************************************************************
+ *
+ * Name			: viewDidLoad
+ * Description	: process when view did load
+ * Returns		: void
+ * Side effects :
+ * Date			: 2016. 06. 22
+ * Author		: SeanKim
+ * History		: 20160622 SeanKim Create function
+ *
+ ********************************************************************/
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
@@ -52,6 +68,17 @@ typedef enum
     [self initLocationInfo];
 }
 
+/********************************************************************
+ *
+ * Name			: didReceiveMemoryWarning
+ * Description	: process when did receive memory warning
+ * Returns		: void
+ * Side effects :
+ * Date			: 2016. 06. 23
+ * Author		: SeanKim
+ * History		: 20160623 SeanKim Create function
+ *
+ ********************************************************************/
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -60,7 +87,7 @@ typedef enum
 /********************************************************************
  *
  * Name			: widgetPerformUpdateWithCompletionHandler
- * Description	: widgetPerformUpdateWithCompletionHandler
+ * Description	: widgetPerformUpdateWithCompletionHandler callback function
  * Returns		: void
  * Side effects :
  * Date			: 2016. 06. 22
@@ -78,43 +105,92 @@ typedef enum
     completionHandler(NCUpdateResultNewData);
 }
 
+/********************************************************************
+ *
+ * Name			: editWidget
+ * Description	: process button action for editing Widget
+ * Returns		: void
+ * Side effects :
+ * Date			: 2016. 06. 23
+ * Author		: SeanKim
+ * History		: 20160623 SeanKim Create function
+ *
+ ********************************************************************/
 - (IBAction) editWidget:(id)sender
 {
     NSURL *pjURL = [NSURL URLWithString:@"todayweather://"];
     [self.extensionContext openURL:pjURL completionHandler:nil];
 }
 
+/********************************************************************
+ *
+ * Name			: updateData
+ * Description	: update All Datas
+ * Returns		: void
+ * Side effects :
+ * Date			: 2016. 06. 25
+ * Author		: SeanKim
+ * History		: 20160625 SeanKim Create function
+ *
+ ********************************************************************/
 - (IBAction) updateData:(id)sender
 {
     [self refreshDatas];
 }
 
+/********************************************************************
+ *
+ * Name			: refreshDatas
+ * Description	: update All Datas
+ * Returns		: void
+ * Side effects :
+ * Date			: 2016. 06. 25
+ * Author		: SeanKim
+ * History		: 20160625 SeanKim Create function
+ *
+ ********************************************************************/
 - (void) refreshDatas
 {
     [self initLocationInfo];
 }
 
-// Location
+/********************************************************************
+ *
+ * Name			: getAddressFromDaum
+ * Description	: get Address data from daum.
+ * Returns		: void
+ * Side effects :
+ * Date			: 2016. 06. 25
+ * Author		: SeanKim
+ * History		: 20160625 SeanKim Create function
+ *
+ ********************************************************************/
 - (void) getAddressFromDaum:(double)latitude longitude:(double)longitude
 {
-    // for emulator - delete me
+    // FIXME - for emulator - delete me
     latitude = 37.574226;
     longitude = 127.191671;
     
     NSString *nssURL = [NSString stringWithFormat:@"%@%@%@%@%g%@%g%@%@", STR_DAUM_COORD2ADDR_URL, STR_APIKEY, DAUM_SERVICE_KEY, STR_LONGITUDE, longitude, STR_LATITUDE, latitude, STR_INPUT_COORD, STR_OUTPUT_JSON];
     
-    NSLog(@"url : %@", nssURL);
+    //NSLog(@"url : %@", nssURL);
     
-    [self requestAsyncRequest:nssURL reqType:TYPE_REQUEST_ADDR];
+    [self requestAsyncByURLSession:nssURL reqType:TYPE_REQUEST_ADDR];
 }
 
-- (void) requestAsyncRequest:(NSString *)nssURL reqType:(NSUInteger)type
+/********************************************************************
+ *
+ * Name			: requestAsyncByURLSession
+ * Description	: request Async using URL Sesion
+ * Returns		: void
+ * Side effects :
+ * Date			: 2016. 06. 25
+ * Author		: SeanKim
+ * History		: 20160625 SeanKim Create function
+ *
+ ********************************************************************/
+- (void) requestAsyncByURLSession:(NSString *)nssURL reqType:(NSUInteger)type
 {
-    //NSURL *myURL = [NSURL URLWithString:@"http://www.example.com"];
-    //NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:myURL cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
-    
-    //[[NSURLConnection alloc] initWithRequest:request delegate:self];
-    
     NSURL *url = [NSURL URLWithString:nssURL];
   
     NSURLSessionTask *task = [[NSURLSession sharedSession] dataTaskWithURL:url
@@ -122,7 +198,7 @@ typedef enum
                               ^(NSData *data, NSURLResponse *response, NSError *error) {
                                   if (data) {
                                       // Do stuff with the data
-                                      NSLog(@"data : %@", data);
+                                      //NSLog(@"data : %@", data);
                                       [self makeJSONWithData:data reqType:type];
                                   } else {
                                       NSLog(@"Failed to fetch %@: %@", url, error);
@@ -132,20 +208,46 @@ typedef enum
     [task resume];
 }
 
+/********************************************************************
+ *
+ * Name			: makeJSONWithData
+ * Description	: make JSON with Data as requesting type
+ * Returns		: void
+ * Side effects :
+ * Date			: 2016. 06. 25
+ * Author		: SeanKim
+ * History		: 20160625 SeanKim Create function
+ *
+ ********************************************************************/
 - (void) makeJSONWithData:(NSData *)jsonData reqType:(NSUInteger)type
 {
     NSError *error;
     NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
-    NSLog(@"%@", jsonDict);
+    //NSLog(@"%@", jsonDict);
     
     if(type == TYPE_REQUEST_ADDR)
+    {
         [self parseJSONData:jsonDict];
+    }
     else if(type == TYPE_REQUEST_WEATHER)
+    {
         [self processWeatherResults:jsonDict];
+    }
     
     //NSLog(@"request weather result %@", jsonDict);
 }
 
+/********************************************************************
+ *
+ * Name			: parseJSONData
+ * Description	: parsing JSON with Data
+ * Returns		: void
+ * Side effects :
+ * Date			: 2016. 06. 25
+ * Author		: SeanKim
+ * History		: 20160625 SeanKim Create function
+ *
+ ********************************************************************/
 - (void) parseJSONData:(NSDictionary *)jsonDict
 {
     NSDictionary *dict;
@@ -159,7 +261,7 @@ typedef enum
     NSCharacterSet *set;
     
     dict = [jsonDict objectForKey:@"error"];
-    NSLog(@"error dict : %@", dict);
+    //NSLog(@"error dict : %@", dict);
     
     if(dict)
     {
@@ -176,24 +278,41 @@ typedef enum
         nssName2 = [jsonDict objectForKey:@"name2"];
         nssName3 = [jsonDict objectForKey:@"name3"];
         
+#if USE_DEBUG
         NSLog(@"nssFullName : %@", nssFullName);
         NSLog(@"nssName : %@", nssName);
         NSLog(@"nssName0 : %@", nssName0);
         NSLog(@"nssName1 : %@", nssName1);
         NSLog(@"nssName2 : %@", nssName2);
         NSLog(@"nssName3 : %@", nssName3);
+#endif
         
         nssURL = [NSString stringWithFormat:@"https://tw-wzdfac.rhcloud.com/v000705/daily/town/%@/%@/%@", nssName1, nssName2, nssName3];
+#if USE_DEBUG
         NSLog(@"nssURL %@", nssURL);
+#endif
         set = [NSCharacterSet URLQueryAllowedCharacterSet];
         
         nssURL = [nssURL stringByAddingPercentEncodingWithAllowedCharacters:set];
+#if USE_DEBUG
         NSLog(@"after %@", nssURL);
+#endif
 
-        [self requestAsyncRequest:nssURL reqType:TYPE_REQUEST_WEATHER];
+        [self requestAsyncByURLSession:nssURL reqType:TYPE_REQUEST_WEATHER];
     }
 }
 
+/********************************************************************
+ *
+ * Name			: processWeatherResults
+ * Description	: draw weather request results
+ * Returns		: void
+ * Side effects :
+ * Date			: 2016. 06. 25
+ * Author		: SeanKim
+ * History		: 20160625 SeanKim Create function
+ *
+ ********************************************************************/
 - (void) processWeatherResults:(NSDictionary *)jsonDict
 {
     NSDictionary *nsdDailySumDict = nil;
@@ -283,15 +402,6 @@ typedef enum
     tomoMaxTemp         = [[tomoDict valueForKey:@"taMax"] unsignedIntValue];
     nssTomPop           = [tomoDict objectForKey:@"pop"];
     
-    NSLog(@"currentTemp : %lu", currentTemp);
-    
-    NSLog(@"todayMinTemp : %lu", todayMinTemp);
-    NSLog(@"todayMaxTemp : %lu", todayMaxTemp);
-    
-    NSLog(@"tomoMinTemp : %lu", tomoMinTemp);
-    NSLog(@"tomoMaxTemp : %lu", tomoMaxTemp);
-    
-    
     dispatch_async(dispatch_get_main_queue(), ^{
         // Current
         updateTimeLabel.text    = nssDate;
@@ -316,18 +426,49 @@ typedef enum
     });
 }
 
-
-
+/********************************************************************
+ *
+ * Name			: connection
+ * Description	: didReceiveResponse
+ * Returns		: void
+ * Side effects :
+ * Date			: 2016. 06. 25
+ * Author		: SeanKim
+ * History		: 20160625 SeanKim Create function
+ *
+ ********************************************************************/
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
     responseData = [[NSMutableData alloc] init];
 }
 
+/********************************************************************
+ *
+ * Name			: connection
+ * Description	: didReceiveData
+ * Returns		: void
+ * Side effects :
+ * Date			: 2016. 06. 25
+ * Author		: SeanKim
+ * History		: 20160625 SeanKim Create function
+ *
+ ********************************************************************/
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
     [responseData appendData:data];
 }
 
+/********************************************************************
+ *
+ * Name			: connection
+ * Description	: didFailWithError
+ * Returns		: void
+ * Side effects :
+ * Date			: 2016. 06. 25
+ * Author		: SeanKim
+ * History		: 20160625 SeanKim Create function
+ *
+ ********************************************************************/
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
     //[responseData release];
@@ -335,6 +476,17 @@ typedef enum
     //[textView setString:@"Unable to fetch data"];
 }
 
+/********************************************************************
+ *
+ * Name			: connectionDidFinishLoading
+ * Description	: process when connection did finish loading
+ * Returns		: void
+ * Side effects :
+ * Date			: 2016. 06. 25
+ * Author		: SeanKim
+ * History		: 20160625 SeanKim Create function
+ *
+ ********************************************************************/
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
     NSLog(@"Succeeded! Received %lu bytes of data",(unsigned long)[responseData length]);
@@ -349,9 +501,9 @@ typedef enum
  * Description	: Init Location Infomation
  * Returns		: void
  * Side effects :
- * Date			: 2010. 08. 06
- * Author		: KwangHo Kim	( khkim@huboro.co.kr )
- * History		: 20100806 khkim Create function
+ * Date			: 2016. 06. 25
+ * Author		: SeanKim
+ * History		: 20160625 SeanKim Create function
  *
  ********************************************************************/
 - (void) initLocationInfo
@@ -371,9 +523,9 @@ typedef enum
  * Description	: get newLocation and oldLocation
  * Returns		: void
  * Side effects :
- * Date			: 2010. 08. 06
- * Author		: KwangHo Kim	( khkim@huboro.co.kr )
- * History		: 20100806 khkim Create function
+ * Date			: 2016. 06. 25
+ * Author		: SeanKim
+ * History		: 20160625 SeanKim Create function
  *
  ********************************************************************/
 - (void) locationManager:(CLLocationManager *)manager
@@ -399,15 +551,6 @@ typedef enum
               newLocation.coordinate.longitude);
         
         [self getAddressFromDaum:gMylatitude longitude:gMylongitude];
-        
-#if 0
-        CLLocation *testCLL = [[CLLocation alloc] initWithLatitude:gMylatitude longitude:gMylongitude];
-        
-        CLLocationDistance distance = [newLocation distanceFromLocation:testCLL];
-        NSLog(@"Distance : %g", distance);
-        
-        [testCLL release];
-#endif		
     }
 }
 
@@ -418,9 +561,9 @@ typedef enum
  * Description	: get Error Value
  * Returns		: void
  * Side effects :
- * Date			: 2010. 08. 06
- * Author		: KwangHo Kim	( khkim@huboro.co.kr )
- * History		: 20100806 khkim Create function
+ * Date			: 2016. 06. 25
+ * Author		: SeanKim
+ * History		: 20160625 SeanKim Create function
  *
  ********************************************************************/
 - (void) locationManager:(CLLocationManager *)manager
