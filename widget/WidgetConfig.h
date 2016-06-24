@@ -13,6 +13,6 @@
  Declare Definitions
  ********************************************************************/
 
-#define DAUM_SERVICE_KEY            @""
+#define DAUM_SERVICE_KEY            @"6d0116e2c49361cb75eaf12f665e6360"
 
 #endif /* WidgetConfig_h */

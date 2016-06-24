@@ -65,7 +65,42 @@ typedef enum
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDefaultsDidChange:) name:NSUserDefaultsDidChangeNotification object:nil];
+    
     [self initLocationInfo];
+}
+
+/********************************************************************
+ *
+ * Name			: userDefaultsDidChange
+ * Description	: process when user defaults is changed
+ * Returns		: void
+ * Side effects :
+ * Date			: 2016. 06. 23
+ * Author		: SeanKim
+ * History		: 20160623 SeanKim Create function
+ *
+ ********************************************************************/
+- (void) userDefaultsDidChange:(NSNotification *)notification
+{
+    NSString *nssAddr1 = nil;
+    NSString *nssAddr2 = nil;
+    NSString *nssAddr3 = nil;
+    NSString *nssReqURL = nil;
+    
+    NSUserDefaults *sharedUserDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.net.wizardfactory.todayweather"];
+    
+    NSLog(@"userDefaultsDidChange Enter");
+    
+    nssAddr1 = [sharedUserDefaults objectForKey:@"addr1"];
+    nssAddr2 = [sharedUserDefaults objectForKey:@"addr2"];
+    nssAddr3 = [sharedUserDefaults objectForKey:@"addr3"];
+    
+    nssReqURL = [self makeRequestURL:nssAddr1 addr2:nssAddr2 addr3:nssAddr3];
+    
+    [self requestAsyncByURLSession:nssReqURL reqType:TYPE_REQUEST_WEATHER];
+    
+    NSLog(@"userDefaultsDidChange Leave");
 }
 
 /********************************************************************
@@ -257,8 +292,8 @@ typedef enum
     NSString *nssName1;
     NSString *nssName2;
     NSString *nssName3;
-    NSString *nssURL;
-    NSCharacterSet *set;
+    
+    NSString *nssURL = nil;
     
     dict = [jsonDict objectForKey:@"error"];
     //NSLog(@"error dict : %@", dict);
@@ -286,21 +321,43 @@ typedef enum
         NSLog(@"nssName2 : %@", nssName2);
         NSLog(@"nssName3 : %@", nssName3);
 #endif
-        
-        nssURL = [NSString stringWithFormat:@"https://tw-wzdfac.rhcloud.com/v000705/daily/town/%@/%@/%@", nssName1, nssName2, nssName3];
-#if USE_DEBUG
-        NSLog(@"nssURL %@", nssURL);
-#endif
-        set = [NSCharacterSet URLQueryAllowedCharacterSet];
-        
-        nssURL = [nssURL stringByAddingPercentEncodingWithAllowedCharacters:set];
-#if USE_DEBUG
-        NSLog(@"after %@", nssURL);
-#endif
+        nssURL = [self makeRequestURL:nssName1 addr2:nssName2 addr3:nssName3];
 
         [self requestAsyncByURLSession:nssURL reqType:TYPE_REQUEST_WEATHER];
     }
 }
+
+
+/********************************************************************
+ *
+ * Name			: makeRequestURL
+ * Description	: make request URL
+ * Returns		: void
+ * Side effects :
+ * Date			: 2016. 06. 25
+ * Author		: SeanKim
+ * History		: 20160625 SeanKim Create function
+ *
+ ********************************************************************/
+- (NSString *) makeRequestURL:(NSString *)nssAddr1 addr2:(NSString*)nssAddr2 addr3:(NSString *)nssAddr3
+{
+    NSString *nssURL = nil;
+    NSCharacterSet *set = nil;
+    
+    nssURL = [NSString stringWithFormat:@"https://tw-wzdfac.rhcloud.com/v000705/daily/town/%@/%@/%@", nssAddr1, nssAddr2, nssAddr3];
+#if USE_DEBUG
+    NSLog(@"nssURL %@", nssURL);
+#endif
+    set = [NSCharacterSet URLQueryAllowedCharacterSet];
+    
+    nssURL = [nssURL stringByAddingPercentEncodingWithAllowedCharacters:set];
+#if USE_DEBUG
+    NSLog(@"after %@", nssURL);
+#endif
+
+    return nssURL;
+}
+
 
 /********************************************************************
  *
@@ -425,6 +482,24 @@ typedef enum
         [self setPreferredContentSize:CGSizeMake(self.view.bounds.size.width, 150)];
     });
 }
+
+#if 0
+/********************************************************************
+ *
+ * Name			: widgetMarginInsetsForProposedMarginInsets
+ * Description	: change margin
+ * Returns		: void
+ * Side effects :
+ * Date			: 2016. 06. 25
+ * Author		: SeanKim
+ * History		: 20160625 SeanKim Create function
+ *
+ ********************************************************************/
+- (UIEdgeInsets)widgetMarginInsetsForProposedMarginInsets:(UIEdgeInsets)defaultMarginInsets
+{
+    return UIEdgeInsetsZero;
+}
+#endif
 
 /********************************************************************
  *

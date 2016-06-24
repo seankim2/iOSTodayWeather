@@ -70,5 +70,6 @@
 - (void) makeJSONWithData:(NSData *)jsonData reqType:(NSUInteger)type;;
 - (void) parseJSONData:(NSDictionary *)jsonDict;
 - (void) processWeatherResults:(NSDictionary *)jsonDict;
+- (NSString *) makeRequestURL:(NSString *)nssAddr1 addr2:(NSString*)nssAddr2 addr3:(NSString *)nssAddr3;
 
 @end

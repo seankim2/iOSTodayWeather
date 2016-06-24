@@ -276,6 +276,7 @@
 		58AAF94BB5EF4A96B3D3CFCA /* QuartzCore.framework */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		59925BF6A62441849F8B3ECE /* libGTMSessionFetcher_full.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; name = libGTMSessionFetcher_full.a; path = "TodayWeather/Plugins/phonegap-plugin-push/GCM/Libraries/libGTMSessionFetcher_full.a"; sourceTree = "<group>"; };
 		5A074FAF1D09A4FB00389C77 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		5A38EACB1D1C217700209D79 /* WidgetConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetConfig.h; sourceTree = "<group>"; };
 		5A3F245CF2134667A9A1452C /* libGTM_iPhone.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; name = libGTM_iPhone.a; path = "TodayWeather/Plugins/phonegap-plugin-push/GCM/Libraries/libGTM_iPhone.a"; sourceTree = "<group>"; };
 		5A5E10181D18251000675B15 /* app-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "app-icon.png"; path = "www/img/app-icon.png"; sourceTree = SOURCE_ROOT; };
 		5A5E10191D18251000675B15 /* CelsiusIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = CelsiusIcon.png; path = www/img/CelsiusIcon.png; sourceTree = SOURCE_ROOT; };
@@ -371,6 +372,7 @@
 		5A8590741CF9B23E00C71D7B /* TodayViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TodayViewController.m; sourceTree = "<group>"; };
 		5A8590771CF9B23E00C71D7B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		5A8590791CF9B23E00C71D7B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5A89FB511D1D7CA700336FBB /* widget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = widget.entitlements; sourceTree = "<group>"; };
 		5D761352B947449BA365C0F0 /* AddressBook.framework */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		5EA1121B7D8D4F7C9D6BDEB9 /* Social.framework */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		617FC6D35EFA43CE9B25F43E /* libGTM_UIFont+LineHeight.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; name = "libGTM_UIFont+LineHeight.a"; path = "TodayWeather/Plugins/phonegap-plugin-push/GCM/Libraries/libGTM_UIFont+LineHeight.a"; sourceTree = "<group>"; };
@@ -844,6 +846,8 @@
 		5A8590721CF9B23E00C71D7B /* widget */ = {
 			isa = PBXGroup;
 			children = (
+				5A89FB511D1D7CA700336FBB /* widget.entitlements */,
+				5A38EACB1D1C217700209D79 /* WidgetConfig.h */,
 				5A8590731CF9B23E00C71D7B /* TodayViewController.h */,
 				5A8590741CF9B23E00C71D7B /* TodayViewController.m */,
 				5A8590761CF9B23E00C71D7B /* MainInterface.storyboard */,
@@ -913,6 +917,11 @@
 					5A85906E1CF9B23E00C71D7B = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = T9X5DG29UJ;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -1154,6 +1163,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: DONG HWAN KIM (87T2CDTQEQ)";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1199,6 +1209,7 @@
 					"\"$(SRCROOT)/TodayWeather/Plugins/phonegap-plugin-push/GCM/Libraries\"",
 				);
 				PRODUCT_NAME = TodayWeather;
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1212,6 +1223,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: DONG HWAN KIM (87T2CDTQEQ)";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1254,6 +1266,7 @@
 					"\"$(SRCROOT)/TodayWeather/Plugins/phonegap-plugin-push/GCM/Libraries\"",
 				);
 				PRODUCT_NAME = TodayWeather;
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -1268,6 +1281,7 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_ENTITLEMENTS = widget/widget.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
@@ -1289,7 +1303,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = net.wizardfactory.todayweather.widget;
+				PRODUCT_BUNDLE_IDENTIFIER = net.wizardfactory.todayweather.todayext;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
@@ -1306,6 +1320,7 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_ENTITLEMENTS = widget/widget.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
@@ -1321,7 +1336,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = net.wizardfactory.todayweather.widget;
+				PRODUCT_BUNDLE_IDENTIFIER = net.wizardfactory.todayweather.todayext;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
