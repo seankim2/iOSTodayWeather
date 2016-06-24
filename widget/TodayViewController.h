@@ -25,16 +25,17 @@
     IBOutlet UILabel        *curTempLabel;              // current temperature title
     IBOutlet UILabel        *curDustLabel;            // current Dust
 
-    IBOutlet UIImageView    *todayWTIconIV;            // yesterday weather status
+    IBOutlet UIImageView    *curWTIconIV;            // current weather status
+    IBOutlet UIImageView    *todWTIconIV;            // today weather status
+    IBOutlet UIImageView    *tomWTIconIV;            // tomorrow weather status
     
-    IBOutlet UILabel        *todayMaxTempLabel;        // yestterday Max Temperature
-    IBOutlet UILabel        *todayMinTempLabel;        // yestterday Min Temperature
+    IBOutlet UILabel        *todayMaxTempLabel;         // today Max Temperature
+    IBOutlet UILabel        *todayMinTempLabel;         // today Min Temperature
+    IBOutlet UILabel        *todayPopLabel;             // today Pop Temperature
     
-    IBOutlet UILabel        *tomoMaxTempLabel;        // tomorrow Max Temperature
-    IBOutlet UILabel        *tomoMinTempLabel;        // tomorrow Min Temperature
-    
-    IBOutlet UILabel        *yestMaxTempLabel;        // yestterday Max Temperature
-    IBOutlet UILabel        *yestMinTempLabel;        // yestterday Min Temperature
+    IBOutlet UILabel        *tomoMaxTempLabel;          // tomorrow Max Temperature
+    IBOutlet UILabel        *tomoMinTempLabel;          // tomorrow Min Temperature
+    IBOutlet UILabel        *tomoPopLabel;              // tomorrow Pop Temperature
     
     IBOutlet UIButton       *editWidgetBtn;
     IBOutlet UIButton       *updateDataBtn;

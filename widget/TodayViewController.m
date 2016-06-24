@@ -197,39 +197,45 @@ typedef enum
 - (void) processWeatherResults:(NSDictionary *)jsonDict
 {
     NSDictionary *nsdDailySumDict = nil;
-    
-    NSString *nssDSIcon = nil;
-    NSString *nssDSIconImgName = nil;
-    NSString *nssDSText = nil;    // DailySummary Text
-    
     NSDictionary *currentDict = nil;
     NSDictionary *currentArpltnDict = nil;
-    
     NSDictionary *todayDict = nil;
     NSDictionary *tomoDict = nil;
-    NSDictionary *yestDict = nil;
     
+    // Date
+    NSString    *nssDate = nil;
+
+    // Image
+    NSString *nssCurIcon = nil;
+    NSString *nssCurImgName = nil;
+    NSString *nssTodIcon = nil;
+    NSString *nssTodImgName = nil;
+    NSString *nssTomIcon = nil;
+    NSString *nssTomImgName = nil;
+
+    // Temperature
     NSUInteger currentTemp = 0;
-    NSString    *nssPm10Str = nil;
-    
     NSUInteger todayMinTemp = 0;
     NSUInteger todayMaxTemp = 0;
-    
     NSUInteger tomoMinTemp = 0;
     NSUInteger tomoMaxTemp = 0;
     
-    NSUInteger yestMinTemp = 0;
-    NSUInteger yestMaxTemp = 0;
+    // Dust
+    NSString    *nssPm10Str = nil;
     
+    // Address
     NSString    *nssCityName = nil;
     NSString    *nssRegionName = nil;
     NSString    *nssTownName = nil;
     NSString    *nssAddress = nil;
     
-    NSString    *nssDate = nil;
+    // Pop
+    NSString    *nssTodPop = nil;
+    NSString    *nssTomPop = nil;
     
     NSLog(@"processWeatherResults : %@", jsonDict);
     
+    // Address
     nssCityName = [jsonDict objectForKey:@"cityName"];
     nssRegionName = [jsonDict objectForKey:@"regionName"];
     nssTownName = [jsonDict objectForKey:@"townName"];
@@ -249,39 +255,33 @@ typedef enum
         }
     }
     
-    
+    // Daily Summary
     nsdDailySumDict = [jsonDict objectForKey:@"dailySummary"];
-    
     nssDate     = [nsdDailySumDict objectForKey:@"date"];
-    
-    nssDSIcon   = [nsdDailySumDict objectForKey:@"icon"];
-    nssDSIconImgName = [NSString stringWithFormat:@"%@.png", nssDSIcon];
-    
-    nssDSText   = [nsdDailySumDict objectForKey:@"text"];
-    
+    nssCurIcon   = [nsdDailySumDict objectForKey:@"icon"];
+    nssCurImgName = [NSString stringWithFormat:@"%@.png", nssCurIcon];
+
+    // Current
     currentDict         = [nsdDailySumDict objectForKey:@"current"];
     currentArpltnDict   = [currentDict objectForKey:@"arpltn"];
     nssPm10Str          = [currentArpltnDict objectForKey:@"pm10Str"];
+    currentTemp         = [[currentDict valueForKey:@"t1h"] unsignedIntValue];
     
-    todayDict   = [nsdDailySumDict objectForKey:@"today"];
-    tomoDict    = [nsdDailySumDict objectForKey:@"tomorrow"];
-    yestDict    = [nsdDailySumDict objectForKey:@"yesterday"];
+    // Today
+    todayDict           = [nsdDailySumDict objectForKey:@"today"];
+    nssTodIcon          = [todayDict objectForKey:@"skyIcon"];
+    nssTodImgName       = [NSString stringWithFormat:@"%@.png", nssTodIcon];
+    todayMinTemp        = [[todayDict valueForKey:@"taMin"] unsignedIntValue];
+    todayMaxTemp        = [[todayDict valueForKey:@"taMax"] unsignedIntValue];
+    nssTodPop           = [todayDict objectForKey:@"pop"];
     
-    currentTemp  = [[currentDict valueForKey:@"t1h"] unsignedIntValue];
-    
-    todayMinTemp = [[todayDict valueForKey:@"tmn"] unsignedIntValue];
-    todayMaxTemp = [[todayDict valueForKey:@"tmx"] unsignedIntValue];
-    
-    tomoMinTemp = [[tomoDict valueForKey:@"tmn"] unsignedIntValue];
-    tomoMaxTemp = [[tomoDict valueForKey:@"tmx"] unsignedIntValue];
-    
-    yestMinTemp = [[yestDict valueForKey:@"tmn"] unsignedIntValue];
-    yestMaxTemp = [[yestDict valueForKey:@"tmx"] unsignedIntValue];
-    
-    NSLog(@"nssDSIcon : %@", nssDSIcon);
-    
-    NSLog(@"nssDSIconImgName : %@", nssDSIconImgName);
-    NSLog(@"nssDSText : %@", nssDSText);
+    // Tomorrow
+    tomoDict            = [nsdDailySumDict objectForKey:@"tomorrow"];
+    nssTomIcon          = [tomoDict objectForKey:@"skyIcon"];
+    nssTomImgName       = [NSString stringWithFormat:@"%@.png", nssTomIcon];
+    tomoMinTemp         = [[tomoDict valueForKey:@"taMin"] unsignedIntValue];
+    tomoMaxTemp         = [[tomoDict valueForKey:@"taMax"] unsignedIntValue];
+    nssTomPop           = [tomoDict objectForKey:@"pop"];
     
     NSLog(@"currentTemp : %lu", currentTemp);
     
@@ -291,31 +291,28 @@ typedef enum
     NSLog(@"tomoMinTemp : %lu", tomoMinTemp);
     NSLog(@"tomoMaxTemp : %lu", tomoMaxTemp);
     
-    NSLog(@"yestMinTemp : %lu", yestMinTemp);
-    NSLog(@"yestMaxTemp : %lu", yestMaxTemp);
-    
-    
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        // code here
-        addressLabel.text       = nssAddress;
+        // Current
         updateTimeLabel.text    = nssDate;
-        
-        curDustLabel.text       = nssPm10Str;
+        addressLabel.text       = nssAddress;
+        curWTIconIV.image       = [UIImage imageNamed:nssCurImgName];
         curTempLabel.text       = [NSString stringWithFormat:@"%lu도", currentTemp];
+        curDustLabel.text       = nssPm10Str;
         
-        todayMaxTempLabel.text  = [NSString stringWithFormat:@"%lu도", todayMaxTemp];        // yestterday Max Temperature
-        todayMinTempLabel.text  = [NSString stringWithFormat:@"%lu도", todayMinTemp];        // yestterday Min Temperature
+        // Today
+        todWTIconIV.image       = [UIImage imageNamed:nssTodImgName];
+        todayMaxTempLabel.text  = [NSString stringWithFormat:@"%lu도", todayMaxTemp];
+        todayMinTempLabel.text  = [NSString stringWithFormat:@"%lu도", todayMinTemp];
+        todayPopLabel.text      = [NSString stringWithFormat:@"%@%%", nssTodPop];
         
-        tomoMaxTempLabel.text  = [NSString stringWithFormat:@"%lu도", tomoMaxTemp];        // tomorrow Max Temperature
-        tomoMinTempLabel.text  = [NSString stringWithFormat:@"%lu도", tomoMinTemp];        // tomorrow Min Temperature
+        // Tomorrow
+        tomoMaxTempLabel.text   = [NSString stringWithFormat:@"%lu도", tomoMaxTemp];
+        tomoMinTempLabel.text   = [NSString stringWithFormat:@"%lu도", tomoMinTemp];
+        tomoPopLabel.text       = [NSString stringWithFormat:@"%@%%", nssTomPop];
+        tomWTIconIV.image       = [UIImage imageNamed:nssTomImgName];
         
-        yestMaxTempLabel.text  = [NSString stringWithFormat:@"%lu도", yestMaxTemp];        // yestterday Max Temperature
-        yestMinTempLabel.text  = [NSString stringWithFormat:@"%lu도", yestMinTemp];        // yestterday Min Temperature
-        
-        todayWTIconIV.image = [UIImage imageNamed:nssDSIconImgName];
-        
-        [self setPreferredContentSize:CGSizeMake(self.view.bounds.size.width, 180)];
+        [self setPreferredContentSize:CGSizeMake(self.view.bounds.size.width, 150)];
     });
 }
 
