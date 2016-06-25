@@ -65,6 +65,8 @@ typedef enum
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
+    self.view.hidden = true;
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDefaultsDidChange:) name:NSUserDefaultsDidChangeNotification object:nil];
     
     [self initLocationInfo];
@@ -480,6 +482,8 @@ typedef enum
         tomWTIconIV.image       = [UIImage imageNamed:nssTomImgName];
         
         [self setPreferredContentSize:CGSizeMake(self.view.bounds.size.width, 150)];
+        
+        self.view.hidden = false;
     });
 }
 
