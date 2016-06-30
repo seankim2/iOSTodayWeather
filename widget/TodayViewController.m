@@ -205,8 +205,8 @@ typedef enum
 - (void) getAddressFromDaum:(double)latitude longitude:(double)longitude
 {
     // FIXME - for emulator - delete me
-    latitude = 37.574226;
-    longitude = 127.191671;
+    //latitude = 37.574226;
+    //longitude = 127.191671;
     
     NSString *nssURL = [NSString stringWithFormat:@"%@%@%@%@%g%@%g%@%@", STR_DAUM_COORD2ADDR_URL, STR_APIKEY, DAUM_SERVICE_KEY, STR_LONGITUDE, longitude, STR_LATITUDE, latitude, STR_INPUT_COORD, STR_OUTPUT_JSON];
     
@@ -662,7 +662,7 @@ typedef enum
         NSLog(@"error code : %ld", (long)error.code);
         
         // just test - delete me
-        [self getAddressFromDaum:gMylatitude longitude:gMylongitude];
+        //[self getAddressFromDaum:gMylatitude longitude:gMylongitude];
     }
 }
 
